@@ -1,0 +1,23 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #047c64, #0b9b7e);
+}
+
+.card {
+  border-radius: 1rem;
+}
+
+.card-header {
+  background-color: #047c64 !important;
+}
+
+.btn-primary {
+  background-color: #047c64;
+  border-color: #047c64;
+}
+
+.btn-primary:hover {
+  background-color: #036553;
+  border-color: #036553;
+}
+

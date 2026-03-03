@@ -1,0 +1,49 @@
+<div class="container-fluid py-4 h-100"
+    style="background: linear-gradient(180deg, #D2CCCC 0%, #5C5A5A 100%); min-height: 100vh;">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0 text-center">Registro TAH</h3>
+        </div>
+        <div class="card-body p-0">
+            <ul class="nav nav-tabs nav-fill" id="tahTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold text-success" id="empleado-tab" data-bs-toggle="tab"
+                        data-bs-target="#empleado" type="button" role="tab" aria-controls="empleado"
+                        aria-selected="true" style="font-size: 1.1rem;">Empleado</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold text-success" id="alumno-tab" data-bs-toggle="tab"
+                        data-bs-target="#alumno" type="button" role="tab" aria-controls="alumno" aria-selected="false"
+                        style="font-size: 1.1rem;">Alumno</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold text-success" id="herramienta-tab" data-bs-toggle="tab"
+                        data-bs-target="#herramienta" type="button" role="tab" aria-controls="herramienta"
+                        aria-selected="false" style="font-size: 1.1rem;">Herramienta</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="tahTabsContent">
+                <!-- Pestaña de Empleado -->
+                <div class="tab-pane fade show active p-3" id="empleado" role="tabpanel" aria-labelledby="empleado-tab">
+                    <app-empleado></app-empleado>
+                </div>
+
+                <!-- Pestaña de Alumno -->
+                <div class="tab-pane fade p-3" id="alumno" role="tabpanel" aria-labelledby="alumno-tab">
+                    <app-alumno></app-alumno>
+                </div>
+
+                <!-- Pestaña de Herramienta -->
+                <div class="tab-pane fade p-3" id="herramienta" role="tabpanel" aria-labelledby="herramienta-tab">
+                    <app-herramienta></app-herramienta>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light p-3">
+            <div class="text-start">
+                <button class="btn btn-secondary px-4 fw-bold" routerLink="/admin">Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>

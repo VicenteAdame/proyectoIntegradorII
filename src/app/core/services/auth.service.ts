@@ -18,7 +18,7 @@ export class AuthService {
       apellidoMaterno: '',
       rol: 'Administrador',
       estado: true,
-      contrasena: 'admin123'
+      contrasena: '123456'
     },
     {
       nomina: 'E001',

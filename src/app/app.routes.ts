@@ -9,6 +9,7 @@ import { Historial } from './components/historial/historial';
 import { Prestamo } from './components/prestamo/prestamo';
 import { Tah } from './components/tah/tah';
 import { ControlInventario } from './components/control-inventario/control-inventario';
+import { TahComponent } from './components/tah/tah.component';
 
 
 export const routes: Routes = [
@@ -55,7 +56,7 @@ export const routes: Routes = [
   },
   {
     path: 'tah',
-    component: Tah
+    component: TahComponent
   },
   {
     path: '**',

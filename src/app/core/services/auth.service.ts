@@ -27,7 +27,7 @@ export class AuthService {
       apellidoMaterno: '',
       rol: 'Empleado',
       estado: true,
-      contrasena: 'empleado123'
+      contrasena: '123'
     }
   ];
 

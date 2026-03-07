@@ -1,16 +1,19 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Empleado, RolEmpleado } from '../models/empleado.model';
+import { EmpleadoModel, RolEmpleado } from '../models/empleado.model';
 
 interface Credenciales {
   nomina: string;
   contrasena: string;
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class AuthService {
-  private readonly empleados: Empleado[] = [
+  private readonly empleados: EmpleadoModel[] = [
     {
       nomina: 'A001',
       nombre: 'Administrador',
@@ -31,12 +34,14 @@ export class AuthService {
     }
   ];
 
-  private readonly usuarioActualSignal = signal<Empleado | null>(null);
+
+
+  private readonly usuarioActualSignal = signal<EmpleadoModel | null>(null);
 
   readonly usuarioActual = computed(() => this.usuarioActualSignal());
   readonly estaAutenticado = computed(() => this.usuarioActualSignal() !== null);
 
-  login(credenciales: Credenciales): Empleado | null {
+  login(credenciales: Credenciales): EmpleadoModel | null {
     const { nomina, contrasena } = credenciales;
     const encontrado = this.empleados.find(
       (e) => e.nomina === nomina && e.contrasena === contrasena && e.estado

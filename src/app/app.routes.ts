@@ -10,6 +10,7 @@ import { Prestamo } from './components/prestamo/prestamo';
 import { Tah } from './components/tah/tah';
 import { ControlInventario } from './components/control-inventario/control-inventario';
 import { TahComponent } from './components/tah/tah.component';
+import { NavegationComponent } from './components/navegation-component/navegation-component';
 
 
 export const routes: Routes = [
@@ -51,7 +52,7 @@ export const routes: Routes = [
     component: Historial
   },
   {
-    path: 'prestamo',
+    path: 'prestamo-registro',
     component: Prestamo
   },
   {
@@ -61,6 +62,10 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
+  },
+  {
+    path:'navegation',
+    component: NavegationComponent
   }
 ];
 

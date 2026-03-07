@@ -6,9 +6,12 @@ interface Credenciales {
   contrasena: string;
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class AuthService {
   private readonly empleados: Empleado[] = [
     {
@@ -30,6 +33,8 @@ export class AuthService {
       contrasena: '123'
     }
   ];
+
+
 
   private readonly usuarioActualSignal = signal<Empleado | null>(null);
 

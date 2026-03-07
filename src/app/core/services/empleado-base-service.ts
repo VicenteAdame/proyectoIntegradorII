@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Firestore, collection, collectionData}from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { Empleado } from '../models/empleado.model';
+import { EmpleadoModel } from '../models/empleado.model';
 
 
 @Injectable({
@@ -12,9 +12,9 @@ import { Empleado } from '../models/empleado.model';
 export class EmpleadoBaseService {
   constructor(private firestore: Firestore) {}
 
-  getEmpleados(): Observable<Empleado[]> {
+  getEmpleados(): Observable<EmpleadoModel[]> {
     const empleadosRef = collection(this.firestore, 'empleados');
-    return collectionData(empleadosRef) as Observable<Empleado[]>;
+    return collectionData(empleadosRef, { idField: 'id' }) as Observable<EmpleadoModel[]>;
   }
 
 

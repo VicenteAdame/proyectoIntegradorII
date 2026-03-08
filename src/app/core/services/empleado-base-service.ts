@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, doc, updateDoc, deleteDoc, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { EmpleadoModel } from '../models/empleado.model';
 
@@ -7,11 +7,32 @@ import { EmpleadoModel } from '../models/empleado.model';
   providedIn: 'root',
 })
 export class EmpleadoBaseService {
-  constructor(private firestore: Firestore) { }
+  private empleados$: Observable<EmpleadoModel[]>;
+
+  constructor(private firestore: Firestore) {
+    // Inicializar dentro del constructor asegura estar dentro del "Injection Context" de Angular
+    // evitando el error "warnOutsideInjectionContext"
+    const empleadosRef = collection(this.firestore, 'empleados');
+    const empleadosQuery = query(empleadosRef, orderBy('nomina'));
+
+    this.empleados$ = new Observable<EmpleadoModel[]>(subscriber => {
+      const unsubscribe = onSnapshot(empleadosQuery,
+        (snapshot) => {
+          const empleados = snapshot.docs.map(docSnap => ({
+            id: docSnap.id,
+            ...docSnap.data()
+          } as unknown as EmpleadoModel));
+          subscriber.next(empleados);
+        },
+        (error) => subscriber.error(error)
+      );
+
+      return () => unsubscribe();
+    });
+  }
 
   getEmpleados(): Observable<EmpleadoModel[]> {
-    const empleadosRef = collection(this.firestore, 'empleados');
-    return collectionData(empleadosRef, { idField: 'id' }) as Observable<EmpleadoModel[]>;
+    return this.empleados$;
   }
 
   async crear(empleado: any): Promise<any> {

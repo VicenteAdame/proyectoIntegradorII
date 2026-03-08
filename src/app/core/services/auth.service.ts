@@ -1,5 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { EmpleadoModel, RolEmpleado } from '../models/empleado.model';
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
 
 interface Credenciales {
   nomina: string;
@@ -13,47 +14,45 @@ interface Credenciales {
 
 
 export class AuthService {
-  private readonly empleados: EmpleadoModel[] = [
-    {
-      nomina: 'A001',
-      nombre: 'Administrador',
-      apellidoPaterno: 'Sistema',
-      apellidoMaterno: '',
-      rol: 'Administrador',
-      estado: true,
-      contrasena: '123456'
-    },
-    {
-      nomina: 'E001',
-      nombre: 'Empleado',
-      apellidoPaterno: 'General',
-      apellidoMaterno: '',
-      rol: 'Empleado',
-      estado: true,
-      contrasena: '123'
-    }
-  ];
-
-
-
   private readonly usuarioActualSignal = signal<EmpleadoModel | null>(null);
 
   readonly usuarioActual = computed(() => this.usuarioActualSignal());
   readonly estaAutenticado = computed(() => this.usuarioActualSignal() !== null);
 
-  login(credenciales: Credenciales): EmpleadoModel | null {
+  constructor(private firestore: Firestore) { }
+
+  async login(credenciales: Credenciales): Promise<EmpleadoModel | null> {
     const { nomina, contrasena } = credenciales;
-    const encontrado = this.empleados.find(
-      (e) => e.nomina === nomina && e.contrasena === contrasena && e.estado
+
+    // Consulta a la colección empleados
+    const empleadosRef = collection(this.firestore, 'empleados');
+    const q = query(
+      empleadosRef,
+      where('nomina', '==', nomina),
+      where('contrasena', '==', contrasena),
+      where('estado', '==', true)
     );
 
-    if (!encontrado) {
+    try {
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        this.usuarioActualSignal.set(null);
+        return null;
+      }
+
+      // Tomamos el primer documento que coincida
+      const doc = querySnapshot.docs[0];
+      const empleadoLogueado = { id: doc.id, ...doc.data() } as unknown as EmpleadoModel;
+
+      this.usuarioActualSignal.set(empleadoLogueado);
+      return empleadoLogueado;
+
+    } catch (error) {
+      console.error('Error durante la autenticación:', error);
       this.usuarioActualSignal.set(null);
       return null;
     }
-
-    this.usuarioActualSignal.set(encontrado);
-    return encontrado;
   }
 
   logout(): void {

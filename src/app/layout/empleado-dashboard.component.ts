@@ -7,12 +7,12 @@ import { NavegationComponent } from '../components/navegation-component/navegati
 @Component({
   selector: 'app-empleado-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink,NavegationComponent],
+  imports: [CommonModule, RouterLink],
   templateUrl: './empleado-dashboard.component.html',
   styleUrl: './empleado-dashboard.component.css'
 })
 export class EmpleadoDashboardComponent {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   onLogout(): void {
     this.authService.logout();

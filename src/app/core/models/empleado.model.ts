@@ -1,6 +1,7 @@
 export type RolEmpleado = 'Administrador' | 'Empleado';
 
 export interface EmpleadoModel {
+  id?: string;
   nomina: string;
   nombre: string;
   apellidoPaterno: string;

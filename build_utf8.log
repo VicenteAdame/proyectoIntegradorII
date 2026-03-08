@@ -1,0 +1,73 @@
+﻿[33mÔØ»[39m Building...
+[32mÔ£ö[39m Building...
+Application bundle generation failed. [1.754 seconds] - 2026-03-08T14:48:03.739Z
+
+node.exe : [1m[33m[33mÔû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mNG8113: All imports are unused[0m 
+[1m[35m[plugin angular-compiler][0m
+En C:\Users\vicen\AppData\Roaming\npm\ng.p
+s1: 24 Carácter: 5
++     & "node$exe"  "$basedir/node_modules
+/@angular/cli/bin/ng.js" $arg ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecifie 
+   d: ([1m[33m[33mÔ...r-compiler][0m  
+  :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComma 
+   ndError
+ 
+
+    
+src/app/components/alumno/alumno.ts:6:2:
+[37m      6 Ôöé   [32mimports[37m: 
+[RouterLink],
+        ÔòÁ   [32m~~~~~~~[0m
+
+
+[33mÔû▓ 
+[43;33m[[43;30mWARNING[43;33m][0m 
+[1mNG8113: NavegationComponent is not 
+used within the template of 
+EmpleadoDashboardComponent[0m 
+[1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/empleado-dashboard.comp
+onent.ts:10:37:
+[37m      10 Ôöé   imports: 
+[CommonModule, 
+RouterLink,[32mNavegationComponent[37m],
+         ÔòÁ                              
+        [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX 
+[41;31m[[41;97mERROR[41;31m][0m 
+[1mTS2345: Argument of type 'string | 
+undefined' is not assignable to parameter 
+of type 'string'.
+  Type 'undefined' is not assignable to 
+type 'string'.[0m [1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components/empleado/empleado.h
+tml:70:104:
+[37m      70 Ôöé ...n class="btn btn-sm 
+btn-danger" (click)="eliminarEmpleado(emp.
+[32mid[37m)"
+         ÔòÁ                              
+                                    
+[32m~~[0m
+
+  Error occurs in the template of 
+component Empleado.
+
+    src/app/components/empleado/empleado.t
+s:13:15:
+[37m      13 Ôöé   templateUrl: 
+[32m'./empleado.html'[37m,
+         ÔòÁ                
+[32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

@@ -1,7 +1,8 @@
 import { EmpleadoModel } from "./empleado.model";
 
 
-export class Empleado implements EmpleadoModel {
+export class Empleado1 implements EmpleadoModel {
+    id?: string;
     nomina: string;
     nombre: string;
     apellidoPaterno: string
@@ -10,7 +11,8 @@ export class Empleado implements EmpleadoModel {
     estado: boolean;
     contrasena: string;
 
-    constructor(data:any={}) {
+    constructor(data: any = {}) {
+        this.id = data.id || undefined;
         this.nomina = data.nomina || '';
         this.nombre = data.nombre || '';
         this.apellidoPaterno = data.apellidoPaterno || '';

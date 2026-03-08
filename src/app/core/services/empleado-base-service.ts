@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, updateDoc, deleteDoc, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { EmpleadoModel } from '../models/empleado.model';
 
@@ -11,20 +11,25 @@ export class EmpleadoBaseService {
 
   getEmpleados(): Observable<EmpleadoModel[]> {
     const empleadosRef = collection(this.firestore, 'empleados');
+    return collectionData(empleadosRef, { idField: 'id' }) as Observable<EmpleadoModel[]>;
+  }
 
-    return new Observable<EmpleadoModel[]>(subscriber => {
-      const unsubscribe = onSnapshot(empleadosRef,
-        (snapshot) => {
-          const empleados = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          } as unknown as EmpleadoModel));
-          subscriber.next(empleados);
-        },
-        (error) => subscriber.error(error)
-      );
+  async crear(empleado: any): Promise<any> {
+    const empleadosRef = collection(this.firestore, 'empleados');
+    const dataToSave = { ...empleado };
+    Object.keys(dataToSave).forEach(key => dataToSave[key] === undefined && delete dataToSave[key]);
+    return addDoc(empleadosRef, dataToSave);
+  }
 
-      return () => unsubscribe();
-    });
+  async actualizar(id: string, empleado: any): Promise<void> {
+    const empleadoDocRef = doc(this.firestore, `empleados/${id}`);
+    const dataToSave = { ...empleado };
+    Object.keys(dataToSave).forEach(key => dataToSave[key] === undefined && delete dataToSave[key]);
+    return updateDoc(empleadoDocRef, dataToSave);
+  }
+
+  async eliminar(id: string): Promise<void> {
+    const empleadoDocRef = doc(this.firestore, `empleados/${id}`);
+    return deleteDoc(empleadoDocRef);
   }
 }

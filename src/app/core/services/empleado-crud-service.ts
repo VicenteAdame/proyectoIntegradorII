@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseCudService } from './base-crud-service';
-import { Empleado } from '../models/empleadoModelCrud';
+import { Empleado1 } from '../models/empleadoModelCrud';
 
 
 
@@ -9,6 +9,6 @@ import { Empleado } from '../models/empleadoModelCrud';
 })
 
 
-export class EmpleadoCrudService extends BaseCudService<Empleado> {
+export class EmpleadoCrudService extends BaseCudService<Empleado1> {
   protected collectionName = 'empleados';
 }

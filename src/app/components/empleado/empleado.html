@@ -25,10 +25,7 @@
                         <button class="btn btn-outline-secondary" type="button">Buscar</button>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-primary"
-                            onclick="document.getElementById('registrar-tab').click()">Nuevo</button>
-                        <button class="btn btn-warning">Editar</button>
-                        <button class="btn btn-danger">Eliminar</button>
+                        <button class="btn btn-primary" (click)="cancelarEdicion()">Nuevo</button>
                     </div>
                 </div>
 
@@ -46,6 +43,7 @@
                                 <th>Rol</th>
                                 <th>Estado</th>
                                 <th>Contraseña</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,8 +53,25 @@
                                 <td>{{emp.apellidoPaterno}}</td>
                                 <td>{{emp.apellidoMaterno}}</td>
                                 <td>{{emp.rol}}</td>
-                                <td>{{emp.estado}}</td>
+                                <td>
+                                    <span class="badge" [ngClass]="emp.estado ? 'bg-success' : 'bg-secondary'">
+                                        {{ emp.estado ? 'Activo' : 'Inactivo' }}
+                                    </span>
+                                </td>
                                 <td>{{emp.contrasena}}</td>
+                                <td class="d-flex gap-1 justify-content-center">
+                                    <button class="btn btn-sm btn-warning" (click)="editarEmpleado(emp)" title="Editar">
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm" [ngClass]="emp.estado ? 'btn-secondary' : 'btn-success'"
+                                        (click)="toggleEstado(emp)" title="Cambiar Estado">
+                                        {{ emp.estado ? 'Desactivar' : 'Activar' }}
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" (click)="eliminarEmpleado(emp.id!)"
+                                        title="Eliminar">
+                                        Eliminar
+                                    </button>
+                                </td>
                             </tr>
 
 
@@ -68,54 +83,60 @@
 
 
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-success">Activar</button>
-                        <button class="btn btn-secondary">Desactivar</button>
-                    </div>
-                    <span class="text-muted">Mostrando: 0 de 0</span>
+                <div class="d-flex justify-content-end align-items-center">
+                    <span class="text-muted">Mostrando: {{ (empleados$ | async)?.length || 0 }} empleados</span>
                 </div>
             </div>
 
             <!-- Pestaña de Registrar -->
             <div class="tab-pane fade" id="registrar" role="tabpanel" aria-labelledby="registrar-tab">
-                <form class="row g-3">
+                <form class="row g-3" [formGroup]="empleadoForm" (ngSubmit)="guardarEmpleado()">
                     <div class="col-md-6">
                         <label for="nomina" class="form-label fw-bold">1.- Ingrese Nomina:</label>
-                        <input type="text" class="form-control" id="nomina">
+                        <input type="text" class="form-control" id="nomina" formControlName="nomina">
                     </div>
                     <div class="col-md-6">
                         <label for="nombre" class="form-label fw-bold">2.- Ingrese Nombre:</label>
-                        <input type="text" class="form-control" id="nombre">
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre">
                     </div>
 
                     <div class="col-md-6">
                         <label for="apellidoPaterno" class="form-label fw-bold">3.- Ingrese Apellido Paterno:</label>
-                        <input type="text" class="form-control" id="apellidoPaterno">
+                        <input type="text" class="form-control" id="apellidoPaterno" formControlName="apellidoPaterno">
                     </div>
                     <div class="col-md-6">
                         <label for="apellidoMaterno" class="form-label fw-bold">4.- Ingrese Apellido Materno:</label>
-                        <input type="text" class="form-control" id="apellidoMaterno">
+                        <input type="text" class="form-control" id="apellidoMaterno" formControlName="apellidoMaterno">
                     </div>
 
                     <div class="col-md-6">
-                        <label for="rol" class="form-label fw-bold">5.- Ingrese Rol:</label>
-                        <input type="text" class="form-control" id="rol">
+                        <label for="rol" class="form-label fw-bold">5.- Seleccione Rol:</label>
+                        <select class="form-select" id="rol" formControlName="rol">
+                            <option value="Empleado">Empleado</option>
+                            <option value="Administrador">Administrador</option>
+                        </select>
                     </div>
-                    <div class="col-md-6">
-                        <label for="estado" class="form-label fw-bold">6.- Ingrese Estado (1 o 0):</label>
-                        <input type="text" class="form-control" id="estado">
+
+                    <div class="col-md-6 d-flex align-items-center mt-5">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="estado" formControlName="estado">
+                            <label class="form-check-label fw-bold" for="estado">
+                                Empleado Activo
+                            </label>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
                         <label for="contraseña" class="form-label fw-bold">7.- Ingrese Contraseña:</label>
-                        <input type="password" class="form-control" id="contraseña">
+                        <input type="password" class="form-control" id="contraseña" formControlName="contrasena">
                     </div>
 
                     <div class="col-12 text-center mt-4">
-                        <button type="submit" class="btn btn-primary px-4 me-3">Guardar</button>
+                        <button type="submit" class="btn btn-primary px-4 me-3" [disabled]="empleadoForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
                         <button type="button" class="btn btn-secondary px-4"
-                            onclick="document.getElementById('listado-tab').click()">Cancelar</button>
+                            (click)="cancelarEdicion()">Cancelar</button>
                     </div>
                 </form>
             </div>

@@ -21,9 +21,9 @@ export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router
-  ) {}
+  ) { }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     this.mostrandoErrores = false;
     this.mensajeError = '';
 
@@ -38,20 +38,25 @@ export class LoginComponent {
 
     this.enviando = true;
 
-    const empleado = this.authService.login({ nomina, contrasena });
+    try {
+      const empleado = await this.authService.login({ nomina, contrasena });
 
-    this.enviando = false;
+      if (!empleado) {
+        this.mostrandoErrores = true;
+        this.mensajeError = 'ID o contraseña incorrecta.';
+        return;
+      }
 
-    if (!empleado) {
+      if (empleado.rol === 'Administrador') {
+        this.router.navigate(['/admin']);
+      } else {
+        this.router.navigate(['/empleado']);
+      }
+    } catch (error) {
       this.mostrandoErrores = true;
-      this.mensajeError = 'ID o contraseña incorrecta.';
-      return;
-    }
-
-    if (empleado.rol === 'Administrador') {
-      this.router.navigate(['/admin']);
-    } else {
-      this.router.navigate(['/empleado']);
+      this.mensajeError = 'Ocurrió un error al intentar iniciar sesión.';
+    } finally {
+      this.enviando = false;
     }
   }
 }

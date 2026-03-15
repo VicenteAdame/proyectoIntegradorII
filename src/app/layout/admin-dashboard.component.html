@@ -7,15 +7,15 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div>
-        <app-navegation-component></app-navegation-component>
+        <app-navegation-component rol="admin"></app-navegation-component>
       </div>
     </div>
   </nav>
 
 
 
-
-  <div class="container py-4">
+  <ng-container *ngIf="router.url === '/admin'">
+    <div class="container py-4">
     <div class="row mb-4">
       <div class="col-12">
         <h2 class="mb-1">Bienvenido, Administrador</h2>
@@ -35,7 +35,7 @@
             </p>
           </div>
           <div class="card-footer bg-transparent border-0">
-            <button type="button" class="btn btn-sm btn-primary" routerLink="/empleado-registro">
+            <button type="button" class="btn btn-sm btn-primary" routerLink="/admin/empleado-registro">
               Gestionar empleados
             </button>
           </div>
@@ -51,7 +51,7 @@
             </p>
           </div>
           <div class="card-footer bg-transparent border-0">
-            <button type="button" class="btn btn-sm btn-primary" routerLink="/alumno-registro">
+            <button type="button" class="btn btn-sm btn-primary" routerLink="/admin/alumno-registro">
               Gestionar alumnos
             </button>
           </div>
@@ -67,7 +67,7 @@
             </p>
           </div>
           <div class="card-footer bg-transparent border-0">
-            <button type="button" class="btn btn-sm btn-primary" routerLink="/herramienta-registro">
+            <button type="button" class="btn btn-sm btn-primary" routerLink="/admin/herramienta-registro">
               Gestionar herramientas
             </button>
           </div>
@@ -83,7 +83,7 @@
             </p>
           </div>
           <div class="card-footer bg-transparent border-0">
-            <button type="button" class="btn btn-sm btn-primary" routerLink="/prestamo-registro">
+            <button type="button" class="btn btn-sm btn-primary" routerLink="/admin/prestamo-registro">
               Registrar préstamo
             </button>
           </div>
@@ -99,7 +99,7 @@
             </p>
           </div>
           <div class="card-footer bg-transparent border-0">
-            <button type="button" class="btn btn-sm btn-primary" routerLink="/tah">
+            <button type="button" class="btn btn-sm btn-primary" routerLink="/admin/tah">
               Registrar devolución
             </button>
           </div>
@@ -115,7 +115,7 @@
             </p>
           </div>
           <div class="card-footer bg-transparent border-0">
-            <button type="button" class="btn btn-sm btn-primary" routerLink="/historial">
+            <button type="button" class="btn btn-sm btn-primary" routerLink="/admin/historial">
               Ver historial
             </button>
           </div>
@@ -123,4 +123,11 @@
       </div>
     </div>
   </div>
+</ng-container>
+
+  <ng-container *ngIf="router.url !== '/admin'">
+    <div class="container py-4">
+      <router-outlet></router-outlet>
+    </div>
+  </ng-container>
 </div>

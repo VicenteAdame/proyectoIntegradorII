@@ -25,47 +25,29 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    component: AdminDashboardComponent
+    component: AdminDashboardComponent,
+    children: [
+      { path: 'control-inventario', component: ControlInventario },
+      { path: 'alumno-registro', component: Alumno },
+      { path: 'empleado-registro', component: Empleado },
+      { path: 'herramienta-registro', component: Herramienta },
+      { path: 'historial', component: Historial },
+      { path: 'prestamo-registro', component: Prestamo },
+      { path: 'tah', component: TahComponent },
+    ]
   },
   {
     path: 'empleado',
-    component: EmpleadoDashboardComponent
-  },
-  {
-    path: 'control-inventario',
-    component: ControlInventario
-  },
-  {
-    path: 'alumno-registro',
-    component: Alumno
-  },
-  {
-    path: 'empleado-registro',
-    component: Empleado
-  },
-  {
-    path: 'herramienta-registro',
-    component: Herramienta
-  },
-  {
-    path: 'historial',
-    component: Historial
-  },
-  {
-    path: 'prestamo-registro',
-    component: Prestamo
-  },
-  {
-    path: 'tah',
-    component: TahComponent
+    component: EmpleadoDashboardComponent,
+    children: [
+      { path: 'prestamo-registro', component: Prestamo },
+      { path: 'tah', component: TahComponent },
+      { path: 'historial', component: Historial },
+    ]
   },
   {
     path: '**',
     redirectTo: 'login'
-  },
-  {
-    path:'navegation',
-    component: NavegationComponent
   }
 ];
 

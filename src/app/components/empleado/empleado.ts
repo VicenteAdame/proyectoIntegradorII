@@ -5,11 +5,12 @@ import { EmpleadoBaseService } from '../../core/services/empleado-base-service';
 import { Empleado1 } from '../../core/models/empleadoModelCrud';
 import { EmpleadoModel } from '../../core/models/empleado.model';
 import { Observable } from 'rxjs';
+import { NavegationComponent } from '../navegation-component/navegation-component';
 
 @Component({
   selector: 'app-empleado',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,NavegationComponent],
   templateUrl: './empleado.html',
   styleUrl: './empleado.css',
 })

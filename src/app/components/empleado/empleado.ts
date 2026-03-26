@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EmpleadoBaseService } from '../../core/services/empleado-base-service';
+import { EmpleadosService } from '../../empleados.service';
 import { Empleado1 } from '../../core/models/empleadoModelCrud';
 import { EmpleadoModel } from '../../core/models/empleado.model';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { NavegationComponent } from '../navegation-component/navegation-component';
 
 @Component({
@@ -17,7 +17,7 @@ import { NavegationComponent } from '../navegation-component/navegation-componen
 export class Empleado implements OnInit {
   // Inyecciones
   private fb = inject(FormBuilder);
-  private empleadoService = inject(EmpleadoBaseService);
+  private empleadoService = inject(EmpleadosService);
 
   // Observable para la tabla
   empleados$!: Observable<EmpleadoModel[]>;
@@ -38,10 +38,19 @@ export class Empleado implements OnInit {
   });
 
   ngOnInit() {
-    this.empleados$ = this.empleadoService.getEmpleados();
+    this.cargarEmpleados();
   }
 
-  async guardarEmpleado() {
+  cargarEmpleados() {
+    this.empleados$ = this.empleadoService.obtenerEmpleados().pipe(
+      map(data => Object.keys(data || {}).map(key => ({
+        id: key,
+        ...data[key]
+      }) as EmpleadoModel))
+    );
+  }
+
+  guardarEmpleado() {
     if (this.empleadoForm.invalid) {
       this.empleadoForm.markAllAsTouched();
       return;
@@ -51,13 +60,18 @@ export class Empleado implements OnInit {
 
     try {
       if (this.isEditing && this.idEmpleadoActual) {
-        await this.empleadoService.actualizar(this.idEmpleadoActual, unEmpleado);
-        console.log('¡Empleado actualizado exitosamente!');
+        this.empleadoService.actualizarEmpleado(this.idEmpleadoActual, unEmpleado).subscribe(() => {
+          console.log('¡Empleado actualizado exitosamente!');
+          this.cancelarEdicion();
+          this.cargarEmpleados();
+        });
       } else {
-        await this.empleadoService.crear(unEmpleado);
-        console.log('¡Empleado creado exitosamente!');
+        this.empleadoService.agregarEmpleado(unEmpleado).subscribe(() => {
+          console.log('¡Empleado creado exitosamente!');
+          this.cancelarEdicion();
+          this.cargarEmpleados();
+        });
       }
-      this.cancelarEdicion();
     } catch (error) {
       console.error('Error al guardar en Firebase:', error);
     }
@@ -82,22 +96,26 @@ export class Empleado implements OnInit {
     }
   }
 
-  async eliminarEmpleado(id: string) {
+  eliminarEmpleado(id: string) {
     if (confirm('¿Estás seguro de que deseas eliminar este empleado?')) {
       try {
-        await this.empleadoService.eliminar(id);
-        console.log('¡Empleado eliminado!');
+        this.empleadoService.eliminarEmpleado(id).subscribe(() => {
+          console.log('¡Empleado eliminado!');
+          this.cargarEmpleados();
+        });
       } catch (error) {
         console.error('Error al eliminar:', error);
       }
     }
   }
 
-  async toggleEstado(empleado: any) {
+  toggleEstado(empleado: any) {
     try {
       const nuevoEstado = !empleado.estado;
-      await this.empleadoService.actualizar(empleado.id, { estado: nuevoEstado });
-      console.log(`Estado cambiado a ${nuevoEstado ? 'Activo' : 'Inactivo'}`);
+      this.empleadoService.actualizarEmpleado(empleado.id, { ...empleado, estado: nuevoEstado }).subscribe(() => {
+        console.log(`Estado cambiado a ${nuevoEstado ? 'Activo' : 'Inactivo'}`);
+        this.cargarEmpleados();
+      });
     } catch (error) {
       console.error('Error al cambiar de estado:', error);
     }

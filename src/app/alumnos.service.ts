@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/internal/Observable';
 export class AlumnosService {
   private url="https://httpclientproyectointegradorii-default-rtdb.firebaseio.com/";
   constructor(private http: HttpClient) { }
-
+// metodo para obtener los alumnos de la base de datos
   obtenerAlumnos(): Observable<any> {
     return this.http.get(`${this.url}alumnos.json`);
   }

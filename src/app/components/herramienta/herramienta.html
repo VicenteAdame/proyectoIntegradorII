@@ -1,6 +1,7 @@
-<div class="card mt-4 shadow">
+<div class="card mt-0 shadow">
     <div class="card-header bg-success text-white">
-        <h3 class="mb-0 text-center">Registro de Herramienta</h3>
+        <app-navegation-component></app-navegation-component>
+        <h3 class="mb-0 text-start">Registro de Herramienta</h3>
     </div>
     <div class="card-body">
         <ul class="nav nav-tabs" id="herramientaTabs" role="tablist">
@@ -24,10 +25,7 @@
                         <button class="btn btn-outline-secondary" type="button">Buscar</button>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-primary"
-                            onclick="document.getElementById('registrar-tab').click()">Nuevo</button>
-                        <button class="btn btn-warning">Editar</button>
-                        <button class="btn btn-danger">Eliminar</button>
+                        <button class="btn btn-primary" (click)="cancelarEdicion()">Nuevo</button>
                     </div>
                 </div>
 
@@ -39,47 +37,66 @@
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Cantidad</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Data rows map here -->
+                            <!-- Iterando sobre las herramientas obtenidas de Firebase -->
+                            <tr *ngFor="let h of herramientas$ | async">
+                                <td>{{ h.noSerie }}</td>
+                                <td>{{ h.nombre }}</td>
+                                <td>{{ h.descripcion }}</td>
+                                <td>{{ h.cantidad }}</td>
+                                <td class="d-flex gap-1 justify-content-center">
+                                    <button class="btn btn-sm btn-warning" (click)="editarHerramienta(h)" title="Editar">
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" (click)="eliminarHerramienta(h.id!)"
+                                        title="Eliminar">
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="d-flex justify-content-end align-items-center">
-                    <span class="text-muted">Mostrando: 0 de 0</span>
+                    <span class="text-muted">Mostrando: {{ (herramientas$ | async)?.length || 0 }} herramientas</span>
                 </div>
             </div>
 
             <!-- Pestaña de Registrar -->
             <div class="tab-pane fade" id="registrar" role="tabpanel" aria-labelledby="registrar-tab">
-                <form class="row g-3">
+                <form class="row g-3" [formGroup]="herramientaForm" (ngSubmit)="guardarHerramienta()">
                     <div class="col-md-6">
                         <label for="noSerie" class="form-label fw-bold">1.- Ingrese No Serie:</label>
-                        <input type="text" class="form-control" id="noSerie">
+                        <input type="text" class="form-control" id="noSerie" formControlName="noSerie">
                     </div>
                     <div class="col-md-6">
                         <label for="nombre" class="form-label fw-bold">2.- Ingrese Nombre:</label>
-                        <input type="text" class="form-control" id="nombre">
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre">
                     </div>
 
                     <div class="col-md-6">
                         <label for="descripcion" class="form-label fw-bold">3.- Ingrese Descripción:</label>
-                        <textarea class="form-control" id="descripcion" rows="4"></textarea>
+                        <textarea class="form-control" id="descripcion" rows="3" formControlName="descripcion"></textarea>
                     </div>
                     <div class="col-md-6">
                         <label for="cantidad" class="form-label fw-bold">4.- Ingrese Cantidad:</label>
-                        <input type="number" class="form-control" id="cantidad">
+                        <!-- Validaciones configuradas en el ts para números y requeridos -->
+                        <input type="number" class="form-control" id="cantidad" formControlName="cantidad">
                     </div>
 
                     <div class="col-12 text-center mt-4">
-                        <button type="submit" class="btn btn-primary px-4 me-3">Guardar</button>
+                        <button type="submit" class="btn btn-primary px-4 me-3" [disabled]="herramientaForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
                         <button type="button" class="btn btn-secondary px-4"
-                            onclick="document.getElementById('listado-tab').click()">Cancelar</button>
+                            (click)="cancelarEdicion()">Cancelar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
+</div>
